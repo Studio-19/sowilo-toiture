@@ -639,9 +639,8 @@ button {
   inset: 0;
   overflow: hidden;
   user-select: none;
-  touch-action: none;
+  touch-action: pan-y;
   background: #000;
-  cursor: ew-resize;
 }
 
 .realisation-card-compare .realisation-content {
@@ -695,6 +694,7 @@ button {
   justify-content: center;
   cursor: ew-resize;
   pointer-events: auto;
+  touch-action: none;
   border: 2px solid #00231e;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5),
     0 0 0 3px rgba(0, 201, 177, 0.25);

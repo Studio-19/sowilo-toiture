@@ -156,25 +156,28 @@
     const onDown = (e) => {
       dragging = true;
       root.classList.add('is-dragging');
-      setPos(posFromEvent(e));
+      try { handle.setPointerCapture(e.pointerId); } catch (_) {}
       e.preventDefault();
     };
 
     const onMove = (e) => {
       if (!dragging) return;
       setPos(posFromEvent(e));
+      e.preventDefault();
     };
 
-    const onUp = () => {
+    const onUp = (e) => {
+      if (!dragging) return;
       dragging = false;
       root.classList.remove('is-dragging');
+      try { handle.releasePointerCapture(e.pointerId); } catch (_) {}
     };
 
-    // Pointer (mouse + touch unified)
-    root.addEventListener('pointerdown', onDown);
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup', onUp);
-    window.addEventListener('pointercancel', onUp);
+    // Drag only when finger/mouse is on the handle — leaves the image free for page scroll on mobile.
+    handle.addEventListener('pointerdown', onDown);
+    handle.addEventListener('pointermove', onMove);
+    handle.addEventListener('pointerup', onUp);
+    handle.addEventListener('pointercancel', onUp);
 
     // Keyboard accessibility
     handle.addEventListener('keydown', (e) => {
