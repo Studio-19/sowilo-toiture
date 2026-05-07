@@ -132,6 +132,42 @@
     }, 6000);
   });
 
+  // ===== Services mobile carousel dots =====
+  const servicesGrid = document.querySelector('.services-grid');
+  const servicesDots = document.getElementById('services-dots');
+  if (servicesGrid && servicesDots) {
+    const cards = Array.from(servicesGrid.querySelectorAll('.service-card'));
+    cards.forEach((card, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'services-dot';
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', 'Aller au service ' + (i + 1));
+      dot.addEventListener('click', () => {
+        card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      });
+      servicesDots.appendChild(dot);
+    });
+
+    const dots = Array.from(servicesDots.children);
+    const setActive = (idx) => {
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+    };
+    setActive(0);
+
+    const cardObserver = new IntersectionObserver((entries) => {
+      let best = null;
+      entries.forEach(entry => {
+        if (!best || entry.intersectionRatio > best.intersectionRatio) best = entry;
+      });
+      if (best && best.isIntersecting) {
+        setActive(cards.indexOf(best.target));
+      }
+    }, { root: servicesGrid, threshold: [0.5, 0.75, 1] });
+
+    cards.forEach(c => cardObserver.observe(c));
+  }
+
   // ===== Compare slider (avant / après) =====
   document.querySelectorAll('.compare').forEach(initCompare);
 
